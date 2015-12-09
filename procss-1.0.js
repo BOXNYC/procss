@@ -10,11 +10,11 @@
 *
 * Browser testing
 * ---------------
-* Internet Explorer: âˆš6+
-*           FireFox: âˆš1.5+
-*            Chrome: âˆš16+  (Needs work <16)
-*            Safari: âˆš3.5+ (Not tested that far back)
-*             Opera: âˆš9.2+
+* Internet Explorer: 6+
+*           FireFox: 1.5+
+*            Chrome: 16+  (Needs work <16)
+*            Safari: 3.5+ (Not tested that far back)
+*             Opera: 9.2+
 **/
 
 var PROCSS = null;
@@ -98,20 +98,6 @@ var PROCSS = null;
 		};
 		
 		/**
-		 * _parsePluginShortcuts(string code):
-		 * Replaces the code shortcuts to real code
-		 */
-		function _parsePluginShortcuts(code) {
-			for(var _p in ProcssPlugin) {
-				var plugin = ProcssPlugin[_p];
-				if(typeof plugin.shortcuts === 'undefined') continue;
-				for(var _s in plugin.shortcuts)
-					code = code.split(_s).join(plugin.shortcuts[_s]);
-			}
-			return code;
-		}
-		
-		/**
 		 * _evaluateSettings(string code):
 		 * Evaluates and applies settings code
 		 * to override current settings
@@ -164,7 +150,6 @@ var PROCSS = null;
 					// Parse content to code
 					var code = _parseContentSyntax(content);
 					if(!code) continue;
-					code = _parsePluginShortcuts(code);
 					// If local settings
 					if(selectorText.indexOf('settings')===0) {
 						_evaluateSettings(code);
@@ -182,7 +167,7 @@ var PROCSS = null;
 						continue;
 					// If variable
 					} else if(selectorText.indexOf('var ')===0) {
-						if(code.search(/^\s*var\s{1,}/g) == -1) code = 'var '+code;
+						if(code.indexOf(selectorText) == -1) code = selectorText+' '+code;
 						data.vars[selectorText] = code;
 						continue;
 					};
@@ -244,15 +229,6 @@ var PROCSS = null;
 		 * End Procss Class.
 		 */
 	});
-	
-	ProcssPlugin = {
-		procss: {
-			shortcuts: {
-				'Æ’': 'function', // Option+f
-				'â€ ': 'this' // Option+t 
-			}
-		}
-	};
 	
 }(PROCSS));
 
