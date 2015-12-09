@@ -167,7 +167,7 @@ var PROCSS = null;
 						continue;
 					// If variable
 					} else if(selectorText.indexOf('var ')===0) {
-						if(code.indexOf(selectorText) == -1) code = selectorText+' '+code;
+						if(code.indexOf(selectorText) == -1) code = selectorText+' = '+code;
 						data.vars[selectorText] = code;
 						continue;
 					};
