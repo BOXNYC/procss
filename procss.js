@@ -40,6 +40,14 @@ var PROCSS = null;
 		 */
 		
 		/**
+		 * .plugins
+		 * - Interface for extending Procss
+		 */
+		this.plugins = {
+			$: false
+		};
+		
+		/**
 		 * .update()
 		 * - Initiates a basic parse and bind
 		 */
@@ -118,6 +126,7 @@ var PROCSS = null;
 		/**
 		 * _update():
 		 * Gets #selector { content: "code"; } rules,
+		 * parses variables and anonomous functions,
 		 * and saves to Dictionary
 		 */
 		function _update() {
@@ -180,9 +189,9 @@ var PROCSS = null;
 		};
 		
 		/**
-		 * _update():
-		 * Gets #selector { content: "code"; } rules,
-		 * and saves to Dictionary
+		 * _eval():
+		 * Evaluates JavaScript code, captures errors,
+		 * and processes selectors.
 		 */
 		function _eval(procssData) {
 			// Determine selector engine.
@@ -207,7 +216,6 @@ var PROCSS = null;
 				} catch(e) { if(settings.showErrors) console.error(e); };
 			};
 			// Process selectors
-			//var userAgent = _getUserAgent();
 			for(var selector in procssData.elems) {
 				var code = procssData.elems[selector];
 				if(selector == 'document') selector = document;
@@ -231,4 +239,37 @@ var PROCSS = null;
 	});
 	
 }(PROCSS));
+
+/**
+ * Plugin interface (TODO: implement)
+ */
+
+// CSS $elector plugin
+// Extending example: PROCSS.plugins.$ = function(){}
+if(typeof jQuery !== 'undefined' || typeof Zepto !== 'undefined') {
+	PROCSS.plugins.$ = typeof jQuery !== 'undefined' ? jQuery : Zepto;
+} else if(typeof document.querySelectorAll !== 'undefined') {
+	PROCSS.plugins.$ = function(CSSSelector) {
+		var forEach = function (array, callback, scope) {
+			for (var i = 0; i < array.length; i++) {
+				callback.call(scope, i, array[i]);
+			}
+		};
+		var myNodeList = document.querySelectorAll(CSSSelector);
+		forEach(myNodeList, function(index, value) {
+			console.log(index, value, this);
+		});
+	}
+}
+
+// Basic plugins: Shortcuts
+// Extending example: PROCSS.plugins.shortcuts.myShortcuts = {name:replace:}
+PROCSS.plugins.shortcuts {
+	default: {
+		name: 'default',
+		replace: function(str){
+			return str.split('func').join('function');
+		}
+	}
+};
 
