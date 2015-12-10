@@ -194,16 +194,16 @@ var PROCSS = null;
 				var selectorEngine = 'Zepto',
 						$ = Zepto;
 			};
-			// Process CSS vars
-			for(var _var in procssData.vars) {
-				try {
-					eval(procssData.vars[_var]);
-				} catch(e) { if(settings.showErrors) console.error(e); };
-			};
 			// Evaluate functions
 			for(var _func in procssData.funcs) {
 				try {
 					eval(_func+' { '+procssData.funcs[_func]+' } ');
+				} catch(e) { if(settings.showErrors) console.error(e); };
+			};
+			// Process CSS vars
+			for(var _var in procssData.vars) {
+				try {
+					eval(procssData.vars[_var]);
 				} catch(e) { if(settings.showErrors) console.error(e); };
 			};
 			// Process selectors
