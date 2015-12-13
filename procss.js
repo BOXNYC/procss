@@ -126,7 +126,16 @@ var PROCSS = null;
 			for(var _styleSheet = 0; _styleSheet < document.styleSheets.length; _styleSheet++) {
 				var styleSheet = document.styleSheets[_styleSheet];
 				if(typeof styleSheet !== 'object') continue;				
-				var rules = styleSheet.cssRules || styleSheet.rules;
+				var rules = [];
+				try {
+					if(typeof styleSheet.cssRules !== 'undefined' && styleSheet.cssRules)
+						rules = styleSheet.cssRules;
+					else if(typeof styleSheet.rules !== 'undefined' && styleSheet.rules)
+						rules = styleSheet.rules;
+				} catch(e) {
+					if(e.name !== 'SecurityError') throw e;
+					return;
+				}
 				for(var _rule = 0; _rule < rules.length; _rule++) {
 					var rule = rules[_rule];
 					if(typeof rule.style === 'undefined') continue;
